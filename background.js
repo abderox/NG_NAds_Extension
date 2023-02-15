@@ -5,19 +5,6 @@
  */
 
 
-try {
-
-    chrome.action.onClicked.addEventListner((tab) => {
-        chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ['script.js'],
-        });
-    }
-    )
-
-} catch (error) {
-    console.log(error);
-}
 
 
 
@@ -142,9 +129,11 @@ const filter = ['main_frame', 'sub_frame', 'stylesheet', 'script', 'image', 'fon
 chrome.declarativeNetRequest.getDynamicRules((rules) => {
 
     console.log(rules.length)
+
     if (rules.length > 700) {
+
         chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: rules.map(rule => rule.id) }, () => {
-            console.log('Rules updated.');
+            console.log('Rules reseted.');
         });
     }
     console.log(rules.length)
@@ -168,7 +157,7 @@ chrome.declarativeNetRequest.getDynamicRules((rules) => {
     const newRules = serving_ad_domains.filter(domain => !existingDomains.has(domain)).map((domain, index) => {
         return {
             id: Math.floor(Math.random() * 1e9),
-            priority: Math.floor(Math.random() * 99999),
+            priority: Math.floor((Math.random() * 999) + 1),
             action: { type: 'block' },
             condition: {
                 urlFilter: `*://${domain}/*`,
@@ -186,7 +175,7 @@ chrome.declarativeNetRequest.getDynamicRules((rules) => {
             const rules = data.filter(site => !existingDomains.has(site)).map((site, index) => {
                 return {
                     id: Math.floor(Math.random() * 1e9),
-                    priority: Math.floor(Math.random() * 10),
+                    priority: Math.floor((Math.random() * 10) + 1),
                     action: {
                         type: 'redirect',
                         redirect: { url: 'https://www.youtube.com/watch?v=MrSGjDpfGcA' }
