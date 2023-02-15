@@ -140,14 +140,30 @@ const filter = ['main_frame', 'sub_frame', 'stylesheet', 'script', 'image', 'fon
 
 
 chrome.declarativeNetRequest.getDynamicRules((rules) => {
+
+    console.log(rules.length)
+    if (rules.length > 700) {
+        chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: rules.map(rule => rule.id) }, () => {
+            console.log('Rules updated.');
+        });
+    }
+    console.log(rules.length)
+
+
+
+
+
     const existingDomains = new Set();
     for (const rule of rules) {
         const filter = rule.condition.urlFilter;
-        const matches = filter.match(/^https?:\/\/([^/]+)/);
+        const matches = filter.match(/^\*:\/\/([^/]+)/);
         if (matches) {
             existingDomains.add(matches[1]);
         }
     }
+
+    console.log(existingDomains.size)
+
 
     const newRules = serving_ad_domains.filter(domain => !existingDomains.has(domain)).map((domain, index) => {
         return {
@@ -164,11 +180,13 @@ chrome.declarativeNetRequest.getDynamicRules((rules) => {
         .then(response => response.json())
         .then(data => {
 
+
+
             console.log(data.length)
-            const rules = data.filter(site => !existingDomains.has(site.domain)).map((site, index) => {
+            const rules = data.filter(site => !existingDomains.has(site)).map((site, index) => {
                 return {
                     id: Math.floor(Math.random() * 1e9),
-                    priority: Math.floor(Math.random() * 999999),
+                    priority: Math.floor(Math.random() * 10),
                     action: {
                         type: 'redirect',
                         redirect: { url: 'https://www.youtube.com/watch?v=MrSGjDpfGcA' }
@@ -179,6 +197,7 @@ chrome.declarativeNetRequest.getDynamicRules((rules) => {
                     }
                 };
             });
+            console.log(rules)
             newRules.push(...rules);
 
             if (newRules.length > 0) {
@@ -186,12 +205,22 @@ chrome.declarativeNetRequest.getDynamicRules((rules) => {
                     console.log('Rules added.');
                 });
             }
+
         })
         .catch(error => {
             console.error('Error loading data:', error);
+            //remove all rules
+            chrome.declarativeNetRequest.updateDynamicRules({
+                removeRuleIds: [],
+                addRules: []
+            }, () => {
+                console.log('All dynamic rules removed');
+            });
         });
 
 
 });
+
+
 
 
