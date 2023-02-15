@@ -135,7 +135,7 @@ document.addEventListener("DOMSubtreeModified", function () {
     }
     timeout = setTimeout(function () {
         start_removig_ads();
-    }, 2000);
+    }, 1000);
 }, false);
 
 

@@ -192,8 +192,6 @@ chrome.declarativeNetRequest.getDynamicRules((rules) => {
         });
 
 
-
-
 });
 
 
