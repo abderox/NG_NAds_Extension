@@ -94,33 +94,33 @@ function start_removig_ads() {
 
 
     // check if the link is youtube
-    if (window.location.href.includes('youtube')) {
+    // if (window.location.href.includes('youtube')) {
 
-        query_select_all(
-            'ytd-compact-promoted-video-renderer',
-            'ytd-promoted-video-renderer',
-            'ytd-promoted-sparkles-web-renderer',
-            'ytd-promoted-sparkles-text-renderer'
-        ).forEach(element => {
+    //     query_select_all(
+    //         'ytd-compact-promoted-video-renderer',
+    //         'ytd-promoted-video-renderer',
+    //         'ytd-promoted-sparkles-web-renderer',
+    //         'ytd-promoted-sparkles-text-renderer'
+    //     ).forEach(element => {
 
-            if (element) {
-                element.forEach(item => {
-                    if (item) {
-                        if (
-                            item.parentNode
-                        ) {
-                            item.parentNode.removeChild(item);
-                        }
-                        else {
-                            item.remove();
-                        }
-                    }
+    //         if (element) {
+    //             element.forEach(item => {
+    //                 if (item) {
+    //                     if (
+    //                         item.parentNode
+    //                     ) {
+    //                         item.parentNode.removeChild(item);
+    //                     }
+    //                     else {
+    //                         item.remove();
+    //                     }
+    //                 }
 
-                });
-            }
-        });
+    //             });
+    //         }
+    //     });
 
-    }
+    // }
 
 
 
@@ -134,7 +134,9 @@ document.addEventListener("DOMSubtreeModified", function () {
         clearTimeout(timeout);
     }
     timeout = setTimeout(function () {
+        if (!window.location.href.includes('youtube')) {
         start_removig_ads();
+        }
     }, 1000);
 }, false);
 
