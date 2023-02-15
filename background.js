@@ -21,6 +21,8 @@ try {
 
 
 
+
+
 const serving_ad_domains = [
     'doubleclick.net',
     'googlesyndication.com',
@@ -47,6 +49,9 @@ const serving_ad_domains = [
     'yieldlab.net',
     'zedo.com'
 ];
+
+
+
 
 
 // ! old version 2
@@ -130,31 +135,65 @@ String.prototype.hashCode = function () {
 // });
 
 
-    chrome.declarativeNetRequest.getDynamicRules( (rules) => {
-      const existingDomains = new Set();
-      for (const rule of rules) {
+const filter = ['main_frame', 'sub_frame', 'stylesheet', 'script', 'image', 'font', 'object', 'xmlhttprequest', 'ping', 'csp_report', 'media', 'websocket', 'other']
+
+
+
+chrome.declarativeNetRequest.getDynamicRules((rules) => {
+    const existingDomains = new Set();
+    for (const rule of rules) {
         const filter = rule.condition.urlFilter;
         const matches = filter.match(/^https?:\/\/([^/]+)/);
         if (matches) {
-          existingDomains.add(matches[1]);
+            existingDomains.add(matches[1]);
         }
-      }
-  
-      const newRules = serving_ad_domains.filter(domain => !existingDomains.has(domain)).map((domain, index) => {
+    }
+
+    const newRules = serving_ad_domains.filter(domain => !existingDomains.has(domain)).map((domain, index) => {
         return {
-          id: Math.floor(Math.random() * 1e9),
-          priority: Math.floor(Math.random() * 99999),
-          action: { type: 'block' },
-          condition: {
-            urlFilter: `*://${domain}/*`,
-          }
+            id: Math.floor(Math.random() * 1e9),
+            priority: Math.floor(Math.random() * 99999),
+            action: { type: 'block' },
+            condition: {
+                urlFilter: `*://${domain}/*`,
+            }
         };
-      });
-  
-      if (newRules.length > 0) {
-        chrome.declarativeNetRequest.updateDynamicRules({ addRules: newRules }, () => {
-          console.log('Rules added.');
-        });
-      }
     });
- 
+
+    fetch('./sites_json.json')
+        .then(response => response.json())
+        .then(data => {
+
+            console.log(data.length)
+            const rules = data.filter(site => !existingDomains.has(site.domain)).map((site, index) => {
+                return {
+                    id: Math.floor(Math.random() * 1e9),
+                    priority: Math.floor(Math.random() * 999999),
+                    action: {
+                        type: 'redirect',
+                        redirect: { url: 'https://www.youtube.com/watch?v=MrSGjDpfGcA' }
+                    },
+                    condition: {
+                        urlFilter: `*://${site}/*`,
+                        resourceTypes: filter
+                    }
+                };
+            });
+            newRules.push(...rules);
+
+            if (newRules.length > 0) {
+                chrome.declarativeNetRequest.updateDynamicRules({ addRules: newRules }, () => {
+                    console.log('Rules added.');
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error loading data:', error);
+        });
+
+
+
+
+});
+
+
