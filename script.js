@@ -52,6 +52,28 @@ function start_removig_ads() {
         'iframe[id*="_ad_"]',
         'div[class*="ad-"]',
         'div[id*="ad_"]',
+        'iframe[autoplay]',
+        'iframe[allow="autoplay"]',
+        'iframe[allow="autoplay;"]',
+        'iframe[allow="autoplay; fullscreen"]',
+        'iframe[allow="autoplay; fullscreen;"]',
+        'iframe[allow="autoplay; fullscreen; encrypted-media"]',
+        'iframe[allow="autoplay; fullscreen; encrypted-media;"]',
+        'iframe[allow="autoplay; fullscreen; encrypted-media; picture-in-picture"]',
+        'iframe[allow="autoplay; fullscreen; encrypted-media; picture-in-picture;"]',
+        'iframe[allow*="picture-in-picture;"]',
+        'iframe[allow*="picture-in-picture"]',
+        'iframe[allow*="autoplay"]',
+        'iframe[allow*="autoplay;"]',
+        'section[class*="_ad"]',
+        'section[id*="_ad"]',
+        'section[class*="ad_"]',
+        'section[id*="ad_"]',
+        'section[class*="_ad_"]',
+        'section[id*="_ad_"]',
+        'section[class*="video-player"]',
+        'section[id*="video-player"]',
+        
     ).forEach(element => {
         if (element) {
             element.forEach(item => {
