@@ -3,6 +3,8 @@
 
 <head>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
+    <meta charset="UTF-8">
+ 
     <style>
         html,
         body {
@@ -78,20 +80,18 @@
             /* Green */
             border: none;
             color: #ffa600;
-            padding: 15px 32px;
+            padding: 2px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
             font-size: 10px;
-            margin: 4px 2px;
+            margin: 2px 0px;
             cursor: pointer;
+            width: 200px;
+            height: 50px;
         }
 
-        .center {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        
     </style>
 </head>
 
@@ -99,7 +99,7 @@
 
     <div class="bg-image"></div>
 
-    <!-- <button id="toggle">Disable Extension</button> -->
+ 
     <div class="bg-text">
         <div class="inline">
 
@@ -117,10 +117,15 @@ Disclaimer : This is not an AD blocker
             version 1.0.0
         </p>
         <pre>abderox-2023</pre>
+        <button id="toggle">Disable Extension</button>
     </div>
 
+  
 
 </body>
 
-
+<script
+src="./popup.js"
+type="text/javascript"
+></script>
 </html>
