@@ -122,8 +122,17 @@ String.prototype.hashCode = function () {
 // });
 
 
-const filter = ['main_frame', 'sub_frame', 'stylesheet', 'script', 'image', 'font', 'object', 'xmlhttprequest', 'ping', 'csp_report', 'media', 'websocket', 'other']
+chrome.runtime.onInstalled.addListener(function () {
 
+    chrome.declarativeNetRequest.getDynamicRules((rules) => {
+        chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: rules.map(rule => rule.id) }, () => {
+            console.log('Rules reseted.');
+        });
+    });
+
+});
+
+const filter = ['main_frame', 'sub_frame', 'stylesheet', 'script', 'image', 'font', 'object', 'xmlhttprequest', 'ping', 'csp_report', 'media', 'websocket', 'other']
 
 
 chrome.declarativeNetRequest.getDynamicRules((rules) => {
